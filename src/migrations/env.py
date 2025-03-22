@@ -1,38 +1,19 @@
-from logging.config import dictConfig
-
-from alembic import context
-from sqlalchemy import engine_from_config, pool
-from sqlmodel import SQLModel
-
-from apps.users.models import Base  # noqa: F403 
-from core.log import config as log_config
-from database import db_manager 
 from logging.config import fileConfig
 
 from sqlalchemy import create_engine
-from sqlmodel import SQLModel, Field
- 
 
-target_metadata = Base.metadata
+from alembic import context
 
-class Schedule(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    dateandtime: datetime
-    weakday: str = Field(max_length=45) 
-
+# this is the Alembic Config object, which provides
+# access to the values within the .ini file in use.
 config = context.config
+ 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# add your model's MetaData object here
-# for 'autogenerate' support
-# from myapp import mymodel
+from apps.users.models import *
+target_metadata = SQLModel.metadata
 
-
-# other values from the config, defined by the needs of env.py,
-# can be acquired:
-# my_important_option = config.get_main_option("my_important_option")
-# ... etc.
 
 def get_url():
     return config.get_main_option("sqlalchemy.url")
@@ -65,7 +46,7 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    connectable = create_engine(get_url())
+    connectable = create_engine(get_url()) # type: ignore
 
     with connectable.connect() as connection:
         context.configure(
@@ -79,12 +60,13 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
+
 # dictConfig(log_config)
 
 
 # config = context.config
 # url = db_manager.sync_url
-# target_metadata = SQLModel.metadata
+# 
 
 
 # def run_migrations_offline() -> None:

@@ -1,6 +1,5 @@
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict 
-# import os
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file='.env', validate_default=False, extra='ignore')
