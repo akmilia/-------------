@@ -1,7 +1,25 @@
 from contextlib import asynccontextmanager, contextmanager
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlmodel import Session, StaticPool, create_engine
+from sqlmodel import Session, StaticPool, create_engine 
+from sqlalchemy.orm import sessionmaker
+
+from core.config import settings
+
+# Создаем подключение к базе данных
+engine = create_engine(settings.DATABASE_URL, echo=True)
+
+# Создаем фабрику сессий
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# Функция для получения сессии
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 
 
 class DBManager:
