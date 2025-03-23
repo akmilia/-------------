@@ -1,12 +1,12 @@
 from typing import List # type: ignore
 
-from fastapi import FastAPI
+#from fastapi import FastAPI
 from sqlalchemy import Column, Integer, String, Date, ForeignKey, Time, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
-# Инициализация FastAPI
-app = FastAPI()
+# # Инициализация FastAPI
+# app = FastAPI()
 
 
 Base = declarative_base()

@@ -4,29 +4,22 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from alembic import context
 
+# import sys
+# sys.path.append('../apps/users')
+# from models import Base, Attendance, BilNebil, Cabinets, Groups, GroupsUsers, Roles, Schedule, Subjects, Types, TypesSubjects, Users 
+# target_metadata = Base.metadata
+
 import sys
-sys.path.append('../apps/users') 
-from models import Base, Attendance, BilNebil, Cabinets, Groups, GroupsUsers, Roles, Schedule, Subjects, Types, TypesSubjects, Users 
-target_metadata = Base.metadata
-
-
+sys.path.append('./')  
+from apps.users.models import Base, Attendance, BilNebil, Cabinets, Groups, GroupsUsers, Roles, Schedule, Subjects, Types, TypesSubjects, Users
+target_metadata = Base.models
 config = context.config
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 def run_migrations_offline() -> None:
-    """Run migrations in 'offline' mode.
-
-    This configures the context with just a URL
-    and not an Engine, though an Engine is acceptable
-    here as well.  By skipping the Engine creation
-    we don't even need a DBAPI to be available.
-
-    Calls to context.execute() here emit the given string to the
-    script output.
-
-    """
+   
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
@@ -40,12 +33,7 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
-    """Run migrations in 'online' mode.
-
-    In this scenario we need to create an Engine
-    and associate a connection with the context.
-
-    """
+    
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
